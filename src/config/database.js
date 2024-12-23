@@ -1,30 +1,40 @@
-
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const db = require('../models/index.js');
 
+const {
+  DATABASE_URL, // URL kết nối đầy đủ
+  MYSQL_DATABASE,
+  MYSQLHOST,
+  MYSQLUSER,
+  MYSQLPASSWORD,
+  MYSQLPORT,
+} = process.env;
 
-const {HOST, DATABASE, DB_USERNAME, DB_PASSWORD} = process.env;
-const sequelize = new Sequelize(DATABASE, DB_USERNAME, DB_PASSWORD, {
-  host: HOST,
-  dialect:'mysql',
+// Tạo kết nối Sequelize
+const sequelize = new Sequelize(DATABASE_URL, {
+  dialect: 'mysql',
   dialectModule: require('mysql2'),
+  logging: false,
 });
 
-
-let connectDB = async() => {
+let connectDB = async () => {
   try {
+    // Kiểm tra kết nối đến database
     await sequelize.authenticate();
-    console.log('Connected to database.');
-    await db.sequelize.sync({
-      // alter: true, // Alter the tables by adding new columns
-      // force:true, // Drop all tables and create new ones
-      logging: false // Disable logging
-    })
-      .then(()=>{ console.log('Database synchronized.')})
-      .catch(err => console.error('Error:', err));
+    console.log('Connected to the database successfully.');
+
+    // Đồng bộ database schema (nếu cần)
+    await sequelize.sync({
+      // alter: true, // Thay đổi schema mà không mất dữ liệu
+      // force: true, // Xóa và tạo lại các bảng, dùng trong môi trường phát triển
+      logging: false,
+    });
+    console.log('Database synchronized successfully.');
+
+    if (DATABASE_URL) console.log("URL", DATABASE_URL);
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Unable to connect to the database:', error.message);
   }
-}
+};
+
 module.exports = connectDB;
