@@ -11,7 +11,8 @@ const {
 } = process.env;
 const sequelize = new Sequelize(DATABASE, DB_USERNAME, DB_PASSWORD, {
   host: HOST,
-  dialect: 'mysql'
+  dialect: 'mysql',
+  dialectModule: require('mysql2')
 });
 let connectDB = async () => {
   try {
