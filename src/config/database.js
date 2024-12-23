@@ -7,7 +7,7 @@ const db = require('../models/index.js');
 const {HOST, DATABASE, DB_USERNAME, DB_PASSWORD} = process.env;
 const sequelize = new Sequelize(DATABASE, DB_USERNAME, DB_PASSWORD, {
   host: HOST,
-  dialect: 'mysql',
+  dialect: 'mariadb',
 });
 
 
