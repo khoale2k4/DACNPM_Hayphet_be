@@ -11,11 +11,18 @@ const {
 } = process.env;
 
 // Tạo kết nối Sequelize
-const sequelize = new Sequelize(DATABASE_URL, {
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'mysql',
   dialectModule: require('mysql2'),
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
   logging: false,
 });
+
 
 let connectDB = async () => {
   try {
