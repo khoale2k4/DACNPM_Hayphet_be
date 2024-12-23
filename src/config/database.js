@@ -2,13 +2,14 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 const db = require('../models/index.js');
+import mysql2 from 'mysql2'; 
 
 
 const {HOST, DATABASE, DB_USERNAME, DB_PASSWORD} = process.env;
 const sequelize = new Sequelize(DATABASE, DB_USERNAME, DB_PASSWORD, {
   host: HOST,
   dialect:'mysql',
-  dialectModule: require('mysql2'),
+  dialectModule: mysql2,
 });
 
 
